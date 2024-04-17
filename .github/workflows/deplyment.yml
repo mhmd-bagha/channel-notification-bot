@@ -1,0 +1,35 @@
+name: Api Music Streamer
+
+on:
+  push:
+    branches: [ "deploy" ]
+  pull_request:
+    branches: [ "deploy" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.2.0'
+      - uses: actions/checkout@v3
+      - name: Install Dependencies composer.json
+        run: composer install --optimize-autoloader --no-dev
+      - name: Directory Permissions
+        run: chmod 777 storage bootstrap/cache
+      - name: Generate key
+        run: php artisan key:generate
+      - name: Config cache
+        run: php artisan config:cache
+      - name: route cache
+        run: php artisan route:cache
+      - name: Optimize cache
+        run: php artisan optimize:clear
+      - name: Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: ${{ secrets.ftp_server }}
+          username: ${{ secrets.ftp_username }}
+          password: ${{ secrets.ftp_password }}
