@@ -1,4 +1,4 @@
-name: Api Music Streamer
+name: Channel Notification Bot
 
 on:
   push:
@@ -19,8 +19,8 @@ jobs:
         run: composer install --optimize-autoloader --no-dev
       - name: Directory Permissions
         run: chmod 777 storage bootstrap/cache
-      - name: Generate key
-        run: php artisan config:clear &&  composer dump-autoload -o && php artisan key:generate
+      #      - name: Generate key
+      #        run: php artisan key:generate
       - name: Config cache
         run: php artisan config:cache
       - name: route cache
