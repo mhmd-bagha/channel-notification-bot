@@ -20,7 +20,7 @@ jobs:
       - name: Directory Permissions
         run: chmod 777 storage bootstrap/cache
       - name: Generate key
-        run: php artisan key:generate
+        run: php artisan config:clear &&  composer dump-autoload -o && php artisan key:generate
       - name: Config cache
         run: php artisan config:cache
       - name: route cache
